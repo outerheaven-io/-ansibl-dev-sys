@@ -1,0 +1,156 @@
+ubuntu_packges:
+    - name: vim
+      state: present
+    - name: zsh
+      state: present
+    - name: unzip
+      state: present
+    - name: emacs
+      state: present
+    - name: curl
+      state: present
+    - name: build-essential
+      state: present
+    - name: automake
+      state: present
+    - name: libssl-dev
+      state: present
+    - name: autoconf
+      state: present
+    - name: libncurses5-dev
+      state: present
+
+ubuntu_debs:
+    - deb: https://github.com/knqyf263/pet/releases/download/v0.3.0/pet_0.3.0_linux_amd64.deb
+
+
+rhel_packages:
+    - name: epel-release
+      state: present
+    - name: openssl-devel
+      state: present
+    - name: ncurses-devel
+      state: present
+    - name: "@Development tools"
+      state: present
+    - name: vim
+      state: present
+    - name: zsh
+      state: present
+    - name: tmux
+      state: present
+    - name: gpg2
+      state: present
+    - name: taskwarrior
+      state: present
+    - name: curl
+      state: present
+    - name: automake
+      state: present
+    - name: libssl-dev
+      state: present
+    - name: autoconf
+      state: present
+    - name: libncurses5-dev
+      state: present
+    - name: salt-minion
+      state: present
+    - name: https://github.com/knqyf263/pet/releases/download/v0.3.0/pet_0.3.0_linux_amd64.rpm
+      state: present
+
+asdf_plugins:
+    - name: erlang
+      repo: https://github.com/asdf-vm/asdf-erlang.git
+    - name: elixir
+      repo: https://github.com/asdf-vm/asdf-elixir.git
+
+
+asdf_install:
+    - name: erlang
+      version: 20.3
+    - name: elixir
+      version: 1.6
+
+base_dirs:
+   - state: directory
+     path: /opt/hashicorp
+     mode: 755
+     group: root
+   - state: directory
+     path: /opt/oh_my_zsh
+     group: root
+     mode: 755
+
+
+remote_binaries_urls:
+   - name: /tmp/terraform.zip
+     url: https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
+     group: root
+     mode: 775
+     checksum: bd0bb7ede0864b7c71f0b575ba79f5ea5d656d8d22d554dadb544e781cf66788
+
+   - name: /tmp/vagrant.zip
+     url: https://releases.hashicorp.com/vagrant/2.1.1/vagrant_2.1.1_linux_amd64.zip
+     group: root
+     mode: 775
+
+   - name: /tmp/vault.zip
+     url: https://releases.hashicorp.com/vault/0.10.1/vault_0.10.1_linux_amd64.zip
+     group: root
+     mode: 775
+
+   - name: /tmp/consul.zip
+     url: https://releases.hashicorp.com/consul/1.1.0/consul_1.1.0_linux_amd64.zip
+     group: root
+     mode: 775
+
+   - name: /tmp/packer.zip
+     url: https://releases.hashicorp.com/packer/1.2.3/packer_1.2.3_linux_amd64.zip
+     group: root
+     mode: 775
+     checksum: 822fe76c2dfe699f187ef8c44537d10453a1545db620e40b345cf6991a690f7d
+
+   - name: /usr/local/bin/kubectl
+     url: https://storage.googleapis.com/kubernetes-release/release/v1.10.0/bin/darwin/amd64/kubectl
+     group: root
+     mode: 775
+
+
+binary_locations:
+   - name: terraform
+     archive_location: https://releases.hashicorp.com/terraform/0.11.7/terraform_0.11.7_linux_amd64.zip
+     bin_dir_location: /usr/local/bin
+     remote_src: true
+     group: root
+
+   - name: consul
+     archive_location: /tmp/consul.zip
+     bin_dir_location: /usr/local/bin
+     remote_src: true
+     group: root
+
+   - name: vault
+     archive_location: /tmp/vault.zip
+     bin_dir_location: /usr/local/bin
+     remote_src: true
+     group: root
+
+   - name: vagrant
+     archive_location: https://releases.hashicorp.com/vagrant/2.1.1/vagrant_2.1.1_linux_amd64.zip
+     bin_dir_location: /usr/local/bin
+     remote_src: true
+     group: root
+
+   - name: packer
+     archive_location: /tmp/packer.zip
+     bin_dir_location: /usr/local/bin
+     remote_src: true
+     group: root
+
+git_repo:
+   - repositry_url: https://github.com/robbyrussell/oh-my-zsh
+     dir_location: /opt/oh_my_zsh
+   - repositry_url: https://github.com/syl20bnr/spacemacs
+     dir_location: /opt/spaceemacs
+   - repositry_url: https://github.com/HashNuke/asdf.git
+     dir_location: /opt/asdf

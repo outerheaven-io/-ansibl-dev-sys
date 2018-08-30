@@ -1,0 +1,15 @@
+---
+- hosts: centos-7
+  become: yes
+  vars:
+  roles:
+    - sysops-ctrl
+
+
+- hosts: ubuntu-18
+  become: yes
+  vars:
+  roles:
+    - sysops-ctrl
+  tasks:
+

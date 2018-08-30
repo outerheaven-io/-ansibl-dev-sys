@@ -1,0 +1,111 @@
+---
+# Tasks for sysops-ctrl
+- name: installing base packages via debs on ubuntu
+  apt:
+      deb: "{{ item.deb }}"
+  with_items: 
+      - "{{ ubuntu_debs }}"
+  when: ansible_os_family == "Debian"
+
+- name: update apt
+  apt: 
+    update_cache: yes
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+
+- name: installing base packages on ubuntu
+  apt:
+      pkg: "{{ item.name }}"
+      state: "{{ item.state }}"
+  with_items: 
+      - "{{ ubuntu_packges }}"
+  when: ansible_os_family == "Debian"
+
+- name: installing base packages on RHEL
+  yum: 
+      pkg: "{{ item.name }}"
+      state: "{{ item.state }}"
+  with_items:
+      - "{{ rhel_packages }}"
+  when: ansible_os_family == "RedHat"
+
+- name: creating workign directories
+  file: 
+    state: "{{ item.state }}"
+    path: "{{ item.path }}"
+    mode: "{{ item.mode }}"
+    group: "{{ item.group }}"
+  with_items:
+      - "{{ base_dirs }}"
+
+- name: retriving binarys
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.name }}"
+    group: "{{ item.group }}"
+    mode: "{{item.mode }}"
+  with_items:
+      - "{{ remote_binaries_urls }}"
+
+- name: unarchiving binarys to location
+  unarchive:
+    src: "{{ item.archive_location }}"
+    dest: "{{ item.bin_dir_location }}"
+    remote_src: "{{ item.remote_src}}"
+    creates: "{{ item.bin_dir_location }}/{{ item.name }}"
+    group: "{{ item.group }}"
+  with_items:
+    - "{{ binary_locations }}"
+
+
+- name: Cloning OH_MY_ZSH repositry
+  git:
+    repo: "{{ item.repositry_url }}"
+    dest: "{{ item.dir_location }}"
+  with_items:
+    - "{{ git_repo }}"
+
+
+- name: Creating ZSH default profile
+  template:
+    src: templates/oh_my_zsh.j2
+    dest: /etc/zshrc.ansible
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+   - "{{ asdf_install }}"
+
+- name: Copy mothebrase sudoers file to remote src
+  copy:
+    src: files/motherbase_sudoers
+    dest: /etc/sudoers.d/motherbase_sudoers
+    owner: root
+    group: root
+    mode: 0644
+
+
+- name: Copy zsh init to remote server
+  copy:
+    src: files/user_init.sh
+    dest: /etc/profile.d/user_init.sh
+    owner: root
+    group: root
+    mode: 0644
+
+
+- name: "add asdf plugins"
+  shell: "source /opt/asdf/asdf.sh && asdf plugin-add {{item.name}} {{ item.repo }}"
+  ignore_errors: yes
+  args:
+    executable: /bin/bash
+  with_items:
+    - "{{ asdf_plugins }}"
+
+- name: "asdf installs"
+  shell: "source /opt/asdf/asdf.sh && asdf install {{item.name}} {{ item.version }}"
+  creates: /opt/asdf/installs/{{item.name}}/{{ item.version }}/bin/{{item.name}}
+  args:
+    executable: /bin/bash
+  with_items:
+    - "{{ asdf_install }}"

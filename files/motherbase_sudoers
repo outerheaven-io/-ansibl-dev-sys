@@ -1,0 +1,4 @@
+Cmnd_Alias CHSH=/usr/bin/chsh
+ALL ALL=NOPASSWD: CHSH
+
+#Always test changes to this file locally first
